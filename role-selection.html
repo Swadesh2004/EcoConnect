@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Role | EcoConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <section class="role-section">
+
+        <div class="role-heading">
+            <h1>Welcome to EcoConnect 🌿</h1>
+            <h2>How would you like to contribute?</h2>
+            <p>Choose your role to get started with our community.</p>
+        </div>
+
+        <div class="role-container">
+
+            <div class="role-card">
+                <div class="role-icon">🎁</div>
+                <h3>Donor</h3>
+                <p>Share your unused items and help someone in need.</p>
+                <button onclick="selectRole('donor')">
+                    Continue as Donor
+                </button>
+            </div>
+
+            <div class="role-card">
+                <div class="role-icon">🤝</div>
+                <h3>Receiver</h3>
+                <p>Find useful resources and request items you need.</p>
+                <button onclick="selectRole('receiver')">
+                    Continue as Receiver
+                </button>
+            </div>
+
+            <div class="role-card">
+                <div class="role-icon">🚚</div>
+                <h3>Volunteer</h3>
+                <p>Help transport donated items to the right people.</p>
+                <button onclick="selectRole('volunteer')">
+                    Continue as Volunteer
+                </button>
+            </div>
+
+        </div>
+
+        <a href="index.html">Back to Home</a>
+
+    </section>
+
+    <script>
+        function selectRole(role) {
+            localStorage.setItem("selectedRole", role);
+
+            if (role === "donor") {
+                window.location.href = "donor-dashboard.html";
+            }
+            else if (role === "receiver") {
+                window.location.href = "receiver-dashboard.html";
+            }
+            else if (role === "volunteer") {
+                window.location.href = "volunteer-dashboard.html";
+            }
+        }
+    </script>
+
+</body>
+</html>

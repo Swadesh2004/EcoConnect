@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post an Item | EcoConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <section class="auth-container">
+        <div class="auth-box post-box">
+
+            <h1>🌿 EcoConnect</h1>
+            <h2>Share an Item</h2>
+            <p>Give your unused item a new purpose!</p>
+
+            <form id="postItemForm">
+
+                <input type="text" id="itemName"
+                    placeholder="Enter item name" required>
+
+                <textarea id="itemDescription"
+                    placeholder="Enter item description"
+                    rows="4" required></textarea>
+
+                <select id="itemCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="Books">Books</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <select id="sharingType" required>
+                    <option value="">Select Sharing Type</option>
+                    <option value="donation">Free Donation</option>
+                    <option value="sale">For Sale</option>
+                    <option value="exchange">Exchange</option>
+                </select>
+
+                <input type="number" id="itemPrice"
+                    placeholder="Enter price (₹)"
+                    min="1" style="display: none;">
+
+                <input type="text" id="itemLocation"
+                    placeholder="Enter your location" required>
+
+                <label for="itemImage">Upload Item Photo</label>
+                <input type="file" id="itemImage"
+                    accept="image/*" required>
+
+                <img id="imagePreview"
+                    src="" alt="Image Preview"
+                    style="display: none; width: 100%; border-radius: 8px; margin-bottom: 15px;">
+
+                <button type="submit">Post Item</button>
+
+            </form>
+
+            <p id="postMessage"></p>
+
+            <a href="my-items.html" class="explore-btn">View My Items</a>
+
+            <a href="index.html">Back to Home</a>
+
+        </div>
+    </section>
+<script src="js/post-item.js"></script>
+</body>
+</html>

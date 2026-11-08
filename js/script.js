@@ -30,9 +30,11 @@ links.forEach(function (link) {
 
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
-const itemCards = document.querySelectorAll(".item-card");
+// const itemCards = document.querySelectorAll(".item-card");
 
 function filterItems() {
+
+    const itemCards = document.querySelectorAll(".item-card");
 
     const searchValue = searchInput.value.toLowerCase();
     const categoryValue = categoryFilter.value;
@@ -122,6 +124,10 @@ detailButtons.forEach(function(button) {
         modalCategory.textContent = details[0].textContent;
         modalLocation.textContent = details[1].textContent;
 
+        requestBtn.disabled = false;
+        requestBtn.textContent = "Request This Item";
+        requestMessage.textContent = "";
+
         itemModal.style.display = "flex";
 
     });
@@ -145,12 +151,127 @@ itemModal.addEventListener("click", function(event) {
 
 
 
-// Request Item Functionality
+// // Request Item Functionality
+
+// const requestBtn = document.querySelector(".request-btn");
+// const requestMessage = document.getElementById("requestMessage");
+
+// requestBtn.addEventListener("click", function() {
+
+//     requestMessage.textContent =
+//         "Your request has been submitted successfully!";
+
+//     requestMessage.style.color = "#176b45";
+
+//     requestBtn.textContent = "Request Submitted";
+//     requestBtn.disabled = true;
+
+// });
+
+
+
+// Request Item Functionality with LocalStorage
+
+// const requestBtn = document.querySelector(".request-btn");
+// const requestMessage = document.getElementById("requestMessage");
+
+// requestBtn.addEventListener("click", function() {
+
+//     const request = {
+//         itemName: modalTitle.textContent,
+//         category: modalCategory.textContent,
+//         location: modalLocation.textContent,
+//         date: new Date().toLocaleDateString(),
+//         status: "Pending"
+//     };
+
+//     let requests = JSON.parse(
+//         localStorage.getItem("ecoRequests")
+//     ) || [];
+
+//     requests.push(request);
+
+//     localStorage.setItem(
+//         "ecoRequests",
+//         JSON.stringify(requests)
+//     );
+
+//     requestMessage.textContent =
+//         "Your request has been saved successfully!";
+
+//     requestMessage.style.color = "#176b45";
+
+//     requestBtn.textContent = "Request Submitted";
+//     requestBtn.disabled = true;
+
+// });
+
+
+
+
+// Request Item Functionality with LocalStorage
 
 const requestBtn = document.querySelector(".request-btn");
 const requestMessage = document.getElementById("requestMessage");
 
 requestBtn.addEventListener("click", function() {
+
+    // Check logged-in user
+    const receiver = JSON.parse(
+        localStorage.getItem("loggedInUser")
+    );
+
+    if (!receiver) {
+        alert("Please login first to request an item!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Get selected item
+    const selectedItem = modalTitle.textContent;
+
+    // Get all posted items
+    const postedItems = JSON.parse(
+        localStorage.getItem("ecoItems")
+    ) || [];
+
+    // Find item details
+    const item = postedItems.find(function(product) {
+        return product.itemName === selectedItem;
+    });
+
+    // Check if item is available for donation
+    if (item && item.sharingType !== "donation") {
+        requestMessage.textContent =
+            "Only free donation items can be requested!";
+        requestMessage.style.color = "red";
+        return;
+    }
+
+    // Prepare request
+    const request = {
+        id: Date.now(),
+        itemName: selectedItem,
+        category: modalCategory.textContent,
+        location: modalLocation.textContent,
+        donorName: item ? item.postedBy : "Community Donor",
+        receiverName: receiver.name,
+        receiverEmail: receiver.email,
+        status: "Pending",
+        date: new Date().toLocaleDateString()
+    };
+
+    // Get existing requests
+    let requests = JSON.parse(
+        localStorage.getItem("ecoRequests")
+    ) || [];
+
+    requests.push(request);
+
+    localStorage.setItem(
+        "ecoRequests",
+        JSON.stringify(requests)
+    );
 
     requestMessage.textContent =
         "Your request has been submitted successfully!";
@@ -161,3 +282,126 @@ requestBtn.addEventListener("click", function() {
     requestBtn.disabled = true;
 
 });
+
+
+
+
+// // Display User Posted Items
+// const postedItemsContainer = document.querySelector(".explore-container");
+
+// function displayPostedItems() {
+
+//     const postedItems = JSON.parse(
+//         localStorage.getItem("ecoItems")
+//     ) || [];
+
+//     postedItems.forEach(function(item) {
+
+//         const card = document.createElement("div");
+//         card.className = "item-card";
+//         card.dataset.category = item.sharingType;
+
+//         const image = document.createElement("img");
+//         image.src = item.image;
+//         image.alt = item.itemName;
+
+//         const title = document.createElement("h3");
+//         title.textContent = item.itemName;
+
+//         const category = document.createElement("p");
+//         category.textContent = "Category: " + item.category;
+
+//         const location = document.createElement("p");
+//         location.textContent = "Location: " + item.location;
+
+//         const type = document.createElement("span");
+
+//         if (item.sharingType === "donation") {
+//             type.textContent = "FREE DONATION";
+//         } else if (item.sharingType === "sale") {
+//             type.textContent = "FOR SALE";
+//         } else {
+//             type.textContent = "EXCHANGE";
+//         }
+
+//         card.appendChild(image);
+//         card.appendChild(type);
+//         card.appendChild(title);
+//         card.appendChild(category);
+//         card.appendChild(location);
+
+//         if (item.sharingType === "sale") {
+//             const price = document.createElement("h4");
+//             price.textContent = "₹" + item.price;
+//             card.appendChild(price);
+//         }
+
+//         const button = document.createElement("button");
+//         button.textContent = "View Details";
+
+//         button.addEventListener("click", function() {
+//             modalImage.src = item.image;
+//             modalTitle.textContent = item.itemName;
+//             modalCategory.textContent = "Category: " + item.category;
+//             modalLocation.textContent = "Location: " + item.location;
+
+//             requestBtn.disabled = false;
+//             requestBtn.textContent = "Request This Item";
+//             requestMessage.textContent = "";
+
+//             itemModal.style.display = "flex";
+//         });
+
+//         card.appendChild(button);
+//         postedItemsContainer.appendChild(card);
+//     });
+// }
+
+// if (postedItemsContainer) {
+//     displayPostedItems();
+// }
+
+
+
+// Display User Posted Items
+const postedItemsContainer = document.querySelector(".explore-container");
+
+function displayPostedItems() {
+    const postedItems = JSON.parse(
+        localStorage.getItem("ecoItems")
+    ) || [];
+
+    postedItems.forEach(function(item) {
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.dataset.category = item.category.toLowerCase();
+
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.itemName}">
+            <h3>${item.itemName}</h3>
+            <p>Category: ${item.category}</p>
+            <p>Location: ${item.location}</p>
+            <p>Type: ${item.sharingType}</p>
+            ${item.sharingType === "sale" ? `<h4>₹${item.price}</h4>` : ""}
+        `;
+
+        const button = document.createElement("button");
+        button.textContent = "View Details";
+
+        button.addEventListener("click", function() {
+            modalImage.src = item.image;
+            modalTitle.textContent = item.itemName;
+            modalCategory.textContent = "Category: " + item.category;
+            modalLocation.textContent = "Location: " + item.location;
+            requestMessage.textContent = "";
+            itemModal.style.display = "flex";
+        });
+
+        card.appendChild(button);
+        postedItemsContainer.appendChild(card);
+    });
+}
+
+if (postedItemsContainer) {
+    displayPostedItems();
+}
